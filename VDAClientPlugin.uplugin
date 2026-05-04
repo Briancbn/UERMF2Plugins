@@ -1,0 +1,30 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "VDAClientPlugin",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "Dillon Chew",
+	"CreatedByURL": "",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"Modules": [
+		
+		{
+			"Name": "VDAClientPlugin",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "VDAWrapper",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
