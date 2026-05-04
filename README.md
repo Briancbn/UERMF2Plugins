@@ -13,7 +13,7 @@ A Unreal Engine 5 plugin that integrates the [VDA5050_client library](https://gi
 
 1. Clone or download this repository
 ```bash
-git git@gitlab.com:ROSI-AP/rmf2/ue/VDA5050ClientPlugin.git
+git clone git@gitlab.com:ROSI-AP/rmf2/ue/VDA5050ClientPlugin.git
 ```
 2. Navigate to your Unreal Engine project directory
 3. Create a `Plugins` folder in your project root if it doesn't exist
