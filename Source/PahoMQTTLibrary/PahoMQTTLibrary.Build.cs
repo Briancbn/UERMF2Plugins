@@ -38,10 +38,11 @@ public class PahoMQTTLibrary : ModuleRules
         }
 
         // Use the synchronous static archive (contains MQTTClient_* functions)
-        string LibPahoCStatic = Path.Combine(LibPath, "libpaho-mqtt3c.so");
-        if (File.Exists(LibPahoCStatic))
+        string LibPahoCRuntime = Path.Combine(LibPath, "libpaho-mqtt3c.so");
+        if (File.Exists(LibPahoCRuntime))
         {
-            PublicAdditionalLibraries.Add(LibPahoCStatic);
+            PublicAdditionalLibraries.Add(LibPahoCRuntime);
+            RuntimeDependencies.Add(LibPahoCRuntime);
         }
         else
         {
