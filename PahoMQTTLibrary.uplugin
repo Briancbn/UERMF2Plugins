@@ -1,0 +1,27 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "1.0",
+	"FriendlyName": "PahoMQTTLibrary",
+	"Description": "provides an actor class  to connect to an MQTT broker to publish messages, and to subscribe to topics and receive published messages. It also provides some helper functions to make publishing one off messages to an MQTT server very straightforward.",
+	"Category": "Networking",
+	"CreatedBy": "John Abogado",
+	"CreatedByURL": "ROS-Industrial",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"EngineVersion": "5.3.0",
+	"CanContainContent": true,
+	"Installed": true,
+	"SupportedTargetPlatforms": [
+		"Linux",
+		"LinuxArm64"
+	],
+	"Modules": [
+		{
+			"Name": "PahoMQTTLibrary",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
