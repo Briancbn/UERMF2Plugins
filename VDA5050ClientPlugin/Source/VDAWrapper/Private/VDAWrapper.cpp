@@ -76,7 +76,7 @@ public:
             node.SequenceId = event->sequence_id;
             node.X = event->x;
             node.Y = event->y;
-            node.Theta = event->theta;  
+            node.Theta = event->theta;
             (*on_node_dispatch)(node);
         }
     });
@@ -122,7 +122,7 @@ public:
 
       engine()->suspend<NodeAckUpdate>(
         [seq = target.sequence_id](auto update) -> bool {
-          return update->sequence_id == seq;  
+          return update->sequence_id == seq;
         });
     }
     else
@@ -187,7 +187,7 @@ struct AGVState
   std::string map_id;
   bool driving = false;
   bool publish_enabled = false;
-  bool event_triggered = false; // Triggers publish call immediately. 
+  bool event_triggered = false; // Triggers publish call immediately.
 };
 
 class StateStrategy : public StrategyInterface
@@ -254,7 +254,7 @@ private:
     state.last_node_sequence_id = agv_state_->last_node_sequence_id;
     state.node_states = agv_state_->node_states;
     state.edge_states = agv_state_->edge_states;
-    state.driving = agv_state_->driving;  
+    state.driving = agv_state_->driving;
     state.operating_mode = vda5050_types::OperatingMode::AUTOMATIC;
     state.battery_state.battery_charge = 100.0;
     state.battery_state.charging = false;
@@ -265,7 +265,8 @@ private:
     pos.x = agv_state_->x;
     pos.y = agv_state_->y;
     pos.theta = agv_state_->theta;
-    pos.map_id = agv_state_->map_id;
+    pos.map_id = "warehouse";
+    pos.position_initialized = true;
     state.agv_position = pos;
 
     protocol_adapter_->publish<vda5050_types::State>(state, 0, false);
@@ -280,7 +281,7 @@ struct FVDA5050Client::FImpl {
   std::shared_ptr<Handler> handler;
   std::shared_ptr<AGVState> agv_state;
 };
-  
+
 FVDA5050Client::FVDA5050Client() : Impl(std::make_unique<FImpl>()) {}
 
 FVDA5050Client::~FVDA5050Client() { Disconnect(); }
@@ -304,7 +305,7 @@ bool FVDA5050Client::Connect(
     vda5050_types::ConnectionState::CONNECTIONBROKEN;
   Impl->protocol_adapter->set_will<vda5050_types::Connection>(
     connection_will, 1, true);
-  
+
   try
   {
     Impl->protocol_adapter->connect();
@@ -315,7 +316,7 @@ bool FVDA5050Client::Connect(
     Impl->protocol_adapter.reset();
     return false;
   }
-  
+
   Impl->agv_state = std::make_shared<AGVState>();
   Impl->context = std::make_shared<SimpleContext>();
   Impl->navigation_strategy = std::make_shared<NavigationStrategy>();
@@ -424,7 +425,7 @@ void FVDA5050Client::SetPublishState(bool bEnabled)
   {
     std::lock_guard<std::mutex> lock(Impl->agv_state->mutex);
     Impl->agv_state->publish_enabled = bEnabled;
-  } 
+  }
 }
 
 void FVDA5050Client::Disconnect()
