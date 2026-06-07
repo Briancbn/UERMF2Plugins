@@ -1,0 +1,16 @@
+name: Style
+
+on:
+  workflow_dispatch:
+  pull_request:
+  push:
+
+jobs:
+  ClangFormat:
+    runs-on: ubuntu-latest
+    steps:
+      - uses: actions/checkout@v6
+      - name: Install clang-format
+        run: sudo apt install clang-format
+      - name: Lint
+        run: ./clang-format.sh
