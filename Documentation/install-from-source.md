@@ -9,7 +9,7 @@
 1. Clone or download this repository inside the `Plugins` folder
 
    ```sh
-   git clone https://github.com/ros-industrial/RMF2ForUnreal
+   git clone https://github.com/ros-industrial/rmf2-unreal
    ```
 
    Your project structure should look like this:

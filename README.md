@@ -1,6 +1,6 @@
 # RMF2 Plugins for Unreal Engine
 
-**RMF2ForUnreal** plugins provides multi-robot simulation to Unreal Engine.
+**RMF2 For Unreal** plugins provides multi-robot simulation to Unreal Engine.
 
 ### 👏 Featured Demos
 
