@@ -1,5 +1,7 @@
-/**
- * Copyright (C) 2025 ROS Industrial Consortium Asia Pacific
+/*
+ * Copyright (C) 2025-2026 ROS-Industrial Consortium Asia Pacific
+ * Advanced Remanufacturing and Technology Centre
+ * A*STAR Research Entities (Co. Registration No. 199702110H)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -159,7 +161,7 @@ bool AMQTTActor::PublishMQTTMessage(
     pubmsg.retained = bRetain ? 1 : 0;
 
     MQTTClient_deliveryToken token;
-    MQTTClient mqttClient = (MQTTClient)Client;     
+    MQTTClient mqttClient = (MQTTClient)Client;
     int rc = MQTTClient_publishMessage(mqttClient, TopicStr.c_str(), &pubmsg, &token);
 
     if (rc != MQTTCLIENT_SUCCESS)
@@ -171,7 +173,7 @@ bool AMQTTActor::PublishMQTTMessage(
 
     // Wait for delivery (optional, adjust timeout as needed)
     rc = MQTTClient_waitForCompletion(Client, token, 1000);
-    
+
     UE_LOG(LogTemp, Log, TEXT("Published to %s: %s"), *Topic, *Message);
     return rc == MQTTCLIENT_SUCCESS;
 }
@@ -186,7 +188,7 @@ bool AMQTTActor::SubscribeToMQTTTopic(const FString& Topic, EMQTTQoS QoS)
     }
 
     std::string TopicStr = TCHAR_TO_UTF8(*Topic);
-    MQTTClient mqttClient = (MQTTClient)Client;  
+    MQTTClient mqttClient = (MQTTClient)Client;
     int rc = MQTTClient_subscribe(mqttClient, TopicStr.c_str(), static_cast<int>(QoS));
 
     if (rc != MQTTCLIENT_SUCCESS)
@@ -231,7 +233,7 @@ bool AMQTTActor::HasMQTTMessages()
 bool AMQTTActor::GetNextMQTTMessage(FString& OutTopic, FString& OutMessage)
 {
     FScopeLock Lock(&MessageQueueLock);
-    
+
     if (MessageQueue.Num() == 0)
     {
         return false;
@@ -271,7 +273,7 @@ int AMQTTActor::OnMessageArrived(void* Context, char* TopicName, int TopicLen, v
         char* PayloadStr = new char[mqttMsg->payloadlen + 1];
         memcpy(PayloadStr, mqttMsg->payload, mqttMsg->payloadlen);
         PayloadStr[mqttMsg->payloadlen] = '\0';
-        
+
         Payload = FString(UTF8_TO_TCHAR(PayloadStr));
         delete[] PayloadStr;
     }

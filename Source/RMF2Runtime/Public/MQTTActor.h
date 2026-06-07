@@ -1,5 +1,7 @@
-/**
- * Copyright (C) 2025 ROS Industrial Consortium Asia Pacific
+/*
+ * Copyright (C) 2025-2026 ROS-Industrial Consortium Asia Pacific
+ * Advanced Remanufacturing and Technology Centre
+ * A*STAR Research Entities (Co. Registration No. 199702110H)
  *
  * Licensed under the Apache License, Version 2.0 (the "License");
  * you may not use this file except in compliance with the License.
@@ -13,6 +15,7 @@
  * See the License for the specific language governing permissions and
  * limitations under the License.
  */
+
 #pragma once
 
 #include "CoreMinimal.h"
