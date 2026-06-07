@@ -8,7 +8,8 @@ inputs:
     type: string
   aws-region:
     required: false
-    type: ap-southeast-1
+    type: string
+    default: ap-southeast-1
   aws-access-key-id:
     required: true
     type: string
