@@ -13,4 +13,4 @@ jobs:
       - name: Install clang-format
         run: sudo apt install clang-format
       - name: Lint
-        run: ./clang-format.sh
+        run: ./clang-format.sh ./Source
