@@ -51,7 +51,7 @@ struct OrderUpdate : public Initialize<OrderUpdate, UpdateBase>
   vda5050_types::Order order;
 
   explicit OrderUpdate(const vda5050_types::Order& order)
-  : order(std::move(order))
+      : order(std::move(order))
   {
     // Nothing to do here ...
   }
@@ -59,13 +59,19 @@ struct OrderUpdate : public Initialize<OrderUpdate, UpdateBase>
 
 struct NodeDispatchEvent : public Initialize<NodeDispatchEvent, EventBase>
 {
-    uint32_t sequence_id;
-    double x, y;
-    std::optional<double> theta;
+  uint32_t sequence_id;
+  double x, y;
+  std::optional<double> theta;
 
-    NodeDispatchEvent(uint32_t sequence_id, double x, double y,
-                      std::optional<double> theta = std::nullopt)
-        : sequence_id(sequence_id), x(x), y(y), theta(theta) {}
+  NodeDispatchEvent(
+      uint32_t sequence_id,
+      double x,
+      double y,
+      std::optional<double> theta = std::nullopt
+  )
+      : sequence_id(sequence_id), x(x), y(y), theta(theta)
+  {
+  }
 };
 
 struct NodeAckUpdate : public Initialize<NodeAckUpdate, UpdateBase>
@@ -81,33 +87,40 @@ struct NodeAckUpdate : public Initialize<NodeAckUpdate, UpdateBase>
 class NavigationStrategy : public StrategyInterface
 {
 public:
-
   std::function<void(const FVDA5050Node&)>* on_node_dispatch = nullptr;
 
   void init(std::shared_ptr<ContextInterface> context) override
   {
     VDA5050_INFO("Initializing NavigationStrategy ...");
 
-    engine()->on<NodeDispatchEvent>([this](auto event) {
-        if (on_node_dispatch && *on_node_dispatch) {
+    engine()->on<NodeDispatchEvent>(
+        [this](auto event)
+        {
+          if (on_node_dispatch && *on_node_dispatch)
+          {
             FVDA5050Node node;
             node.SequenceId = event->sequence_id;
             node.X = event->x;
             node.Y = event->y;
             node.Theta = event->theta;
             (*on_node_dispatch)(node);
+          }
         }
-    });
+    );
 
     context->provider()->on<NodeAckUpdate>(
-      [w = std::weak_ptr(engine())](auto update) {
-        if (auto m = w.lock()) m->notify(update);
-      });
+        [w = std::weak_ptr(engine())](auto update)
+        {
+          if (auto m = w.lock())
+            m->notify(update);
+        }
+    );
   }
 
   void step(std::shared_ptr<ContextInterface> context) override
   {
-    if (engine()->waiting()) return;
+    if (engine()->waiting())
+      return;
 
     if (nodes_.empty())
     {
@@ -128,20 +141,24 @@ public:
     {
       auto target = nodes_[current_idx_++];
       engine()->emit<NodeDispatchEvent>(
-        Priority::NORMAL, target.sequence_id, target.node_position.value().x,
-        target.node_position.value().y,
-        target.node_position.value().theta.value_or(0));
+          Priority::NORMAL,
+          target.sequence_id,
+          target.node_position.value().x,
+          target.node_position.value().y,
+          target.node_position.value().theta.value_or(0)
+      );
 
       VDA5050_INFO(
-        "Pushing node with sequence_id [{}] to event queue",
-        target.sequence_id);
+          "Pushing node with sequence_id [{}] to event queue",
+          target.sequence_id
+      );
 
       engine()->step();
 
       engine()->suspend<NodeAckUpdate>(
-        [seq = target.sequence_id](auto update) -> bool {
-          return update->sequence_id == seq;
-        });
+          [seq = target.sequence_id](auto update) -> bool
+          { return update->sequence_id == seq; }
+      );
     }
     else
     {
@@ -149,7 +166,6 @@ public:
       nodes_.clear();
     }
   }
-
 
 private:
   std::vector<vda5050_types::Node> nodes_;
@@ -164,25 +180,28 @@ class SimpleContext : public ContextInterface,
 public:
   void init() override
   {
-    provider()->on<OrderUpdate>([w = weak_from_this()](auto update) {
-      if (auto m = w.lock())
-      {
-        std::lock_guard<std::mutex> lock(m->mutex_);
-        m->updates_[update->get_type()] = update;
-      }
-    });
+    provider()->on<OrderUpdate>(
+        [w = weak_from_this()](auto update)
+        {
+          if (auto m = w.lock())
+          {
+            std::lock_guard<std::mutex> lock(m->mutex_);
+            m->updates_[update->get_type()] = update;
+          }
+        }
+    );
   }
 
 protected:
-  std::shared_ptr<UpdateBase> get_update_raw(
-    std::type_index type) const override
+  std::shared_ptr<UpdateBase> get_update_raw(std::type_index type
+  ) const override
   {
     std::lock_guard<std::mutex> lock(mutex_);
     return (updates_.count(type)) ? updates_.at(type) : nullptr;
   }
 
-  std::shared_ptr<ResourceBase> get_resource_raw(
-    std::type_index /*type*/) const override
+  std::shared_ptr<ResourceBase>
+  get_resource_raw(std::type_index /*type*/) const override
   {
     return nullptr;
   }
@@ -211,23 +230,25 @@ struct AGVState
 class StateStrategy : public StrategyInterface
 {
 public:
+  std::function<void(double& X, double& Y, double& Theta)>*
+      on_position_request = nullptr;
 
-  std::function<void(double & X, double & Y, double & Theta)>* on_position_request = nullptr;
-
-  explicit StateStrategy(std::shared_ptr<ProtocolAdapter> protocol_adapter,
-                         std::shared_ptr<AGVState> agv_state)
-  : protocol_adapter_(protocol_adapter),
-    agv_state_(agv_state),
-    last_pub_time_(std::chrono::steady_clock::now())
+  explicit StateStrategy(
+      std::shared_ptr<ProtocolAdapter> protocol_adapter,
+      std::shared_ptr<AGVState> agv_state
+  )
+      : protocol_adapter_(protocol_adapter),
+        agv_state_(agv_state),
+        last_pub_time_(std::chrono::steady_clock::now())
   {
   }
 
-  void init(std::shared_ptr<ContextInterface> /*context*/) override
-  {}
+  void init(std::shared_ptr<ContextInterface> /*context*/) override {}
 
   void step(std::shared_ptr<ContextInterface> /*context*/) override
   {
-    if (!agv_state_->publish_enabled) return;
+    if (!agv_state_->publish_enabled)
+      return;
 
     bool publish_now;
     {
@@ -236,10 +257,12 @@ public:
     }
 
     auto now = std::chrono::steady_clock::now();
-    auto elapsed = std::chrono::duration_cast<std::chrono::seconds>(
-      now - last_pub_time_).count();
+    auto elapsed =
+        std::chrono::duration_cast<std::chrono::seconds>(now - last_pub_time_)
+            .count();
 
-    if (!publish_now && elapsed < 30) return;
+    if (!publish_now && elapsed < 30)
+      return;
 
     last_pub_time_ = now;
     publish_state();
@@ -290,7 +313,8 @@ private:
   }
 };
 
-struct FVDA5050Client::FImpl {
+struct FVDA5050Client::FImpl
+{
   std::shared_ptr<ProtocolAdapter> protocol_adapter;
   std::shared_ptr<SimpleContext> context;
   std::shared_ptr<NavigationStrategy> navigation_strategy;
@@ -304,30 +328,35 @@ FVDA5050Client::FVDA5050Client() : Impl(std::make_unique<FImpl>()) {}
 FVDA5050Client::~FVDA5050Client() { Disconnect(); }
 
 bool FVDA5050Client::Connect(
-  const std::string & BrokerAddress,
-  const std::string & InterfaceName,
-  const std::string & Version,
-  const std::string & Manufacturer,
-  const std::string & SerialNumber
+    const std::string& BrokerAddress,
+    const std::string& InterfaceName,
+    const std::string& Version,
+    const std::string& Manufacturer,
+    const std::string& SerialNumber
 )
 {
   auto mqtt_client = vda5050_core::mqtt_client::create_default_client_unique(
-      BrokerAddress, SerialNumber + "-UE5_VDA5050Client"
+      BrokerAddress,
+      SerialNumber + "-UE5_VDA5050Client"
   );
   Impl->protocol_adapter = ProtocolAdapter::make(
-    std::move(mqtt_client), InterfaceName, Version, Manufacturer, SerialNumber
+      std::move(mqtt_client),
+      InterfaceName,
+      Version,
+      Manufacturer,
+      SerialNumber
   );
   vda5050_types::Connection connection_will;
   connection_will.connection_state =
-    vda5050_types::ConnectionState::CONNECTIONBROKEN;
-  Impl->protocol_adapter->set_will<vda5050_types::Connection>(
-    connection_will, 1, true);
+      vda5050_types::ConnectionState::CONNECTIONBROKEN;
+  Impl->protocol_adapter
+      ->set_will<vda5050_types::Connection>(connection_will, 1, true);
 
   try
   {
     Impl->protocol_adapter->connect();
   }
-  catch (const std::exception & e)
+  catch (const std::exception& e)
   {
     VDA5050_ERROR("Failed to connect to broker: {}", e.what());
     Impl->protocol_adapter.reset();
@@ -337,74 +366,82 @@ bool FVDA5050Client::Connect(
   Impl->agv_state = std::make_shared<AGVState>();
   Impl->context = std::make_shared<SimpleContext>();
   Impl->navigation_strategy = std::make_shared<NavigationStrategy>();
-  Impl->state_strategy = std::make_shared<StateStrategy>(Impl->protocol_adapter, Impl->agv_state);
+  Impl->state_strategy =
+      std::make_shared<StateStrategy>(Impl->protocol_adapter, Impl->agv_state);
   Impl->state_strategy->on_position_request = &OnPositionRequest;
-  Impl->handler = Handler::make(Impl->context, {Impl->navigation_strategy, Impl->state_strategy});
+  Impl->handler = Handler::make(
+      Impl->context,
+      {Impl->navigation_strategy, Impl->state_strategy}
+  );
   Impl->navigation_strategy->on_node_dispatch = &OnNodeDispatch;
 
   Impl->protocol_adapter->subscribe<vda5050_types::Order>(
-  [this, w = std::weak_ptr<ContextInterface>(Impl->context),
-   agv_state = Impl->agv_state](auto order, auto error) {
-    if (error.has_value()) return;
-
-    if (auto m = w.lock())
-    {
-      m->provider()->push<OrderUpdate>(order);
-    }
-
-    // Update shared AGV state with the new order info
-    {
-      std::lock_guard<std::mutex> lock(agv_state->mutex);
-      agv_state->order_id = order.order_id;
-      agv_state->order_update_id = order.order_update_id;
-      agv_state->node_states.clear();
-      agv_state->edge_states.clear();
-      for (const auto & node : order.nodes)
+      [this,
+       w = std::weak_ptr<ContextInterface>(Impl->context),
+       agv_state = Impl->agv_state](auto order, auto error)
       {
-        vda5050_types::NodeState node_state;
-        node_state.node_id = node.node_id;
-        node_state.sequence_id = node.sequence_id;
-        node_state.released = node.released;
-        if (node.node_position.has_value())
-        {
-          vda5050_types::NodePosition node_pos;
-          node_pos.x = node.node_position->x;
-          node_pos.y = node.node_position->y;
-          node_pos.map_id = node.node_position->map_id;
-          node_state.node_position = node_pos;
-        }
-        agv_state->node_states.push_back(node_state);
-      }
-      agv_state->event_triggered = true;
-    }
+        if (error.has_value())
+          return;
 
-    if (OnOrderReceived)
-    {
-      FVDA5050Order forder;
-      forder.OrderId = order.order_id;
-      forder.OrderUpdateId = order.order_update_id;
-      for (const auto & node : order.nodes)
-      {
-        FVDA5050Node fnode;
-        fnode.NodeId = node.node_id;
-        fnode.SequenceId = node.sequence_id;
-        if (node.node_position.has_value())
+        if (auto m = w.lock())
         {
-          fnode.X = node.node_position->x;
-          fnode.Y = node.node_position->y;
-          fnode.Theta = node.node_position->theta;
-          forder.Nodes.push_back(fnode);
+          m->provider()->push<OrderUpdate>(order);
         }
-      }
-      OnOrderReceived(forder);
-    }
-  },
-  0);
+
+        // Update shared AGV state with the new order info
+        {
+          std::lock_guard<std::mutex> lock(agv_state->mutex);
+          agv_state->order_id = order.order_id;
+          agv_state->order_update_id = order.order_update_id;
+          agv_state->node_states.clear();
+          agv_state->edge_states.clear();
+          for (const auto& node : order.nodes)
+          {
+            vda5050_types::NodeState node_state;
+            node_state.node_id = node.node_id;
+            node_state.sequence_id = node.sequence_id;
+            node_state.released = node.released;
+            if (node.node_position.has_value())
+            {
+              vda5050_types::NodePosition node_pos;
+              node_pos.x = node.node_position->x;
+              node_pos.y = node.node_position->y;
+              node_pos.map_id = node.node_position->map_id;
+              node_state.node_position = node_pos;
+            }
+            agv_state->node_states.push_back(node_state);
+          }
+          agv_state->event_triggered = true;
+        }
+
+        if (OnOrderReceived)
+        {
+          FVDA5050Order forder;
+          forder.OrderId = order.order_id;
+          forder.OrderUpdateId = order.order_update_id;
+          for (const auto& node : order.nodes)
+          {
+            FVDA5050Node fnode;
+            fnode.NodeId = node.node_id;
+            fnode.SequenceId = node.sequence_id;
+            if (node.node_position.has_value())
+            {
+              fnode.X = node.node_position->x;
+              fnode.Y = node.node_position->y;
+              fnode.Theta = node.node_position->theta;
+              forder.Nodes.push_back(fnode);
+            }
+          }
+          OnOrderReceived(forder);
+        }
+      },
+      0
+  );
 
   vda5050_types::Connection connection_online;
   connection_online.connection_state = vda5050_types::ConnectionState::ONLINE;
-  Impl->protocol_adapter->publish<vda5050_types::Connection>(
-    connection_online, 1, true);
+  Impl->protocol_adapter
+      ->publish<vda5050_types::Connection>(connection_online, 1, true);
 
   return true;
 }
@@ -420,7 +457,7 @@ void FVDA5050Client::ClientNodeAck(uint32_t SequenceId)
   if (Impl && Impl->agv_state)
   {
     std::lock_guard<std::mutex> lock(Impl->agv_state->mutex);
-    auto & node_state = Impl->agv_state->node_states;
+    auto& node_state = Impl->agv_state->node_states;
     for (auto it = node_state.begin(); it != node_state.end(); ++it)
     {
       if (it->sequence_id == SequenceId)
@@ -457,8 +494,8 @@ void FVDA5050Client::Disconnect()
   }
   vda5050_types::Connection connection_offline;
   connection_offline.connection_state = vda5050_types::ConnectionState::OFFLINE;
-  Impl->protocol_adapter->publish<vda5050_types::Connection>(
-    connection_offline, 1, true);
+  Impl->protocol_adapter
+      ->publish<vda5050_types::Connection>(connection_offline, 1, true);
 
   Impl->protocol_adapter->disconnect();
   Impl->protocol_adapter.reset();
