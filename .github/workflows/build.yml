@@ -54,7 +54,9 @@ jobs:
         uses: actions/checkout@v4
       - name: Set environment variables
         run: |
-          echo "BUILD_RMF2_UNREAL_PACKAGE_NAME=RMF2ForUnreal-53-linux-$GITHUB_REF_NAME" >> "$GITHUB_ENV"
+          GITHUB_REF_SLUG=$(echo "$GITHUB_REF_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9]/-/g' | sed 's/^-//;s/-$//')
+          echo "GITHUB_REF_SLUG=$CLEAN_SLUG" >> $GITHUB_ENV
+          echo "BUILD_RMF2_UNREAL_PACKAGE_NAME=RMF2ForUnreal-53-linux-$GITHUB_REF_SLUG" >> "$GITHUB_ENV"
           echo "UNREAL_ENGINE_ROOT=/mnt/work/UE_5.3" >> "$GITHUB_ENV"
           echo "LINUX_MULTIARCH_ROOT=/mnt/work/UE_5.3/Engine/Extras/ThirdPartyNotUE/SDKs/HostLinux/Linux_x64/v22_clang-16.0.6-centos7/" >> "$GITHUB_ENV"
       - name: Make more swap space available
