@@ -50,6 +50,8 @@ jobs:
           # Selectively extract files in order to save disk space
           unzip -q ./ue.zip "Engine/*" -d /mnt/work/UE_5.3 -x "Engine/Binaries/Android/*" "Engine/Binaries/LinuxArm64/*" "Engine/Intermediate/Build/Android/*" "Engine/Intermediate/Build/LinuxArm64/*"
           rm ./ue.zip
+      - name: Check out repository code
+        uses: actions/checkout@v4
       - name: Set environment variables
         run: |
           echo "BUILD_RMF2_UNREAL_PACKAGE_NAME=RMF2ForUnreal-53-linux-$GITHUB_REF_NAME" >> "$GITHUB_ENV"
