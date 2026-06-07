@@ -61,4 +61,5 @@ After successfully installing your Unreal Engine Editor, you should be able to s
    ```
 
 1. Run the simulation by pressing the `play` button. You should be able to see connection and subscription acknowledgement
+
    ![Expected Output from MQTT Broker](Images/MQTT_Broker_Output.png)

@@ -1,6 +1,6 @@
 # Install RMF2 For Unreal from source
 
-### Step1: Add Plugin to Your Project
+### Step 1: Add Plugin to Your Project
 
 1. Navigate to your Unreal Engine project directory
 
