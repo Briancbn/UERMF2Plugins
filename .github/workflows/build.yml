@@ -1,15 +1,18 @@
 name: Build
 
 on:
-  pull_request:
+  pull_request_target:
+    types: [opened, synchronize]
   push:
     branches:
       - main
-      - feature/bn/add-gha
     tags:
       - '*'
 jobs:
   Linux532:
+    # This locks the job behind the GitHub Environment approval gate
+    environment:
+      name: integration
     uses: ./.github/workflows/buildLinux.yml
     secrets: inherit
     with:
