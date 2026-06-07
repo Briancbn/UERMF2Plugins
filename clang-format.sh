@@ -61,7 +61,7 @@ for file in "${files[@]}"; do
     echo
   fi
 
-  if [ "$1" = "--reformat" ]; then
+  if [ "$_reformat_enabled" = 1 ]; then
     clang-format -i "$file"
   fi
 
