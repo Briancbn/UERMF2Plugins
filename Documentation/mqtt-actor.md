@@ -1,6 +1,14 @@
 # MQTT Actor
 
+## Features
+
+- **Connect**: Use the `Connect to MQTT Broker` node with your broker details
+-  **Subscribe**: Subscribe to topics using `Subscribe to MQTT Topic` node you want to receive messages from
+- **Publish**: Send messages to specific topics using `Publish MQTT Message`
+- **Receive**: Use `Get Next MQTT Message` Node to receive the incoming message.
 After successfully installing your Unreal Engine Editor, you should be able to see the plugin
+
+## Usage
 
 ![UE5 Content Editor](Images/UE5_Content_Editor.png)
 
@@ -33,17 +41,24 @@ After successfully installing your Unreal Engine Editor, you should be able to s
 
 ## Demonstration
 
+1. Installing Mosquitto Broker
+
+   ```bash
+   sudo apt-add-repository ppa:mosquitto-dev/mosquitto-ppa
+   sudo apt-get update
+   sudo apt-get install mosquitto mosquitto-clients
+   ```
 1. To test the connectivity to broker. Run the mosquitto broker first before simulation
 
-  ```bash
-  mosquitto -p 1883 -v
-  ```
+   ```bash
+   mosquitto -p 1883 -v
+   ```
 
-  Note: if the port 1883 is used, execute the command below and re-execute the command above.
+   Note: if the port 1883 is used, execute the command below and re-execute the command above.
 
-  ```bash
-  sudo systemctl stop mosquitto
-  ```
+   ```bash
+   sudo systemctl stop mosquitto
+   ```
 
-2. Run the simulation by pressing the `play` button. You should be able to see connection and subscription acknowledgement
+1. Run the simulation by pressing the `play` button. You should be able to see connection and subscription acknowledgement
    ![Expected Output from MQTT Broker](Images/MQTT_Broker_Output.png)

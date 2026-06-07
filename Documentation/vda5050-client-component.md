@@ -1,53 +1,7 @@
 # VDA5050 Client Plugin
-A Unreal Engine 5 plugin that integrates the [VDA5050_client library](https://github.com/ros-industrial/vda5050_client) as a component for Actor classes.
+This module integrates the [vda5050_core library](https://github.com/ros-industrial/vda5050_core) as a `Component` for `Actor` classes.
 
-## Prerequisites
-
-- **Unreal Engine**: 5.3.1
-- **Platform**: Ubuntu 22.04
-- **MQTT Broker**: Required for MQTT communication
-
-## Installation
-
-### Step 1: Add Plugin to Your Project
-
-1. Clone or download this repository
-```bash
-git clone git@gitlab.com:ROSI-AP/rmf2/ue/VDA5050ClientPlugin.git
-```
-2. Navigate to your Unreal Engine project directory
-3. Create a `Plugins` folder in your project root if it doesn't exist
-4. Copy the `VDA5050ClientPlugin` folder into the `Plugins` directory
-
-Your project structure should look like this:
-```
-<YourProjectName>/
-├── Content/
-├── Source/
-├── Plugins/
-│   └── VDA5050ClientPlugin/
-│       ├── VDA5050ClientPlugin.uplugin
-│       ├── Resources/
-│       ├── Source/
-│       └── ThirdParty/
-├── Config/
-├── <YourProjectName>.uproject
-└── ...
-```
-
-### Step 2: Enable the Plugin (Usually don't need to, but if somehow it is not enabled after copy-pasting, Do this)
-
-1. Open your project in Unreal Engine Editor
-2. Go to (Top Left) **Edit → Plugins**
-3. Search for "VDA5050ClientPlugin"
-
-   ![VDAClient Plugin in UE5 Editor](Resources/Plugin.png)
-
-4. Check the box next to **VDA5050ClientPlugin** to enable it
-5. Click **Restart Now** when prompted (or just restart after enabling it)
-
-# VDA5050Client Component
-
+## VDA5050Client Component
 
 1. To add the `VDA5050Client Component` into an `Actor`, click on `Add` under the `Components` tab in the Actor Blueprint and search for `VDA5050Client`.
 
@@ -59,12 +13,12 @@ the `VDA5050Client` Component will be visible under the `Components` tab.
    ![Client Component under Component Tab](Images/VDA5050Client_ClientComponent.png)
 
 
-## Component Details
+### Component Details
 
 Under the `Details` tab of the `Component` (top right window), configure the following properties:
 
 
-### Connection
+#### Connection
 
 Used to construct the VDA5050 MQTT topic structure (`<InterfaceName>/<Version>/<Manufacturer>/<SerialNumber>/<topic>`) and establish the broker connection.
 
@@ -78,7 +32,7 @@ Used to construct the VDA5050 MQTT topic structure (`<InterfaceName>/<Version>/<
 | `bAutoConnect` | Boolean | `false` | When enabled, the component will automatically connect to the broker on BeginPlay. If disabled, you must call `Connect()` manually from Blueprint. **NOTE**: If there are multiple actor instances of the blueprint in the level, it is best to disable this unless `SerialNumber` is set to instance-editable. |
 
 
-### State
+#### State
 
 Controls the component's state reporting behaviour.
 
@@ -87,9 +41,9 @@ Controls the component's state reporting behaviour.
 | `bPublishState` | Boolean | `true` | When enabled, the component periodically publishes AGV state messages (position, velocity, battery, order status, etc.) |
 
 
-## Events and Blueprint Functions
+### Events and Blueprint Functions
 
-### Events
+#### Events
 
 Bindable event dispatchers that notify the owning actor of VDA5050 events.
 Can be added into the event graph by right-clicking the `VDA5050Client` in the `Components` tab and hovering over `Add Event`.
@@ -104,7 +58,7 @@ Events handle incoming orders and connection status.
 | `OnConnectComplete` | `bool bSuccess` | Fired when the MQTT connection attempt completes. `true` if connected successfully, `false` on failure |
 
 
-### Blueprint Functions
+#### Blueprint Functions
 
 Callable functions for controlling the `VDA5050Client` from Blueprint.
 Functions can be accessed by left-clicking and dragging the `VDA5050Client` variable pin onto the event graph:
@@ -120,6 +74,6 @@ Functions can be accessed by left-clicking and dragging the `VDA5050Client` vari
 
 ## Demonstration
 
-Example of the `VDA5050Client` Component being used with `AIMoveTo`
+Example of the `VDA5050Client` Component being used with `AI MoveTo`
 
 ![Example of VDAClient Blueprint Implementation](Images/VDA5050Client_EventGraph.png)
