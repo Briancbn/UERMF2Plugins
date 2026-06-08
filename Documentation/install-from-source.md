@@ -33,7 +33,7 @@
 ### Step 2: Enable the Plugin
 
 > [!NOTE]
-> Usually don't need to, but if somehow it is not enabled after copy-pasting, Do this.
+> Usually don't need to, but if somehow it is not enabled after cloning the repository, Do this.
 
 1. Open your project in Unreal Engine Editor
 
