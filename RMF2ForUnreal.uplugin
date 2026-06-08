@@ -1,0 +1,33 @@
+{
+	"FileVersion": 3,
+	"Version": 1,
+	"VersionName": "0.1.0",
+	"FriendlyName": "RMF2 For Unreal",
+	"Description": "",
+	"Category": "Other",
+	"CreatedBy": "ROS-Industrial Consortium Asia Pacific",
+	"CreatedByURL": "https://rosindustrial.org/ric-apac",
+	"DocsURL": "",
+	"MarketplaceURL": "",
+	"SupportURL": "",
+	"CanContainContent": true,
+	"IsBetaVersion": false,
+	"IsExperimentalVersion": false,
+	"Installed": false,
+	"SupportedTargetPlatforms": [ 
+    "Linux",
+    "LinuxArm64"
+  ],
+	"Modules": [
+		{
+			"Name": "RMF2Runtime",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		},
+		{
+			"Name": "VDA5050CoreWrapper",
+			"Type": "Runtime",
+			"LoadingPhase": "Default"
+		}
+	]
+}
