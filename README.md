@@ -11,7 +11,7 @@
 </p>
 
 
-### 🚀 Get Started
+### 🚀 Getting Started
 
 [Install **RMF2 For Unreal** from source](./Documentation/install-from-source.md)
 
