@@ -6,24 +6,10 @@ inputs:
   unreal-program-name:
     required: true
     type: string
-  aws-region:
-    required: false
-    type: string
-    default: ap-southeast-1
-  aws-access-key-id:
-    required: true
-    type: string
-  aws-secret-access-key:
-    required: true
-    type: string
 runs:
   using: composite
   steps:
     - name: Download Unreal Engine
-      env:
-        AWS_REGION: ${{ inputs.aws-region }}
-        AWS_ACCESS_KEY_ID: ${{ inputs.aws-access-key-id }}
-        AWS_SECRET_ACCESS_KEY: ${{ inputs.aws-secret-access-key }}
       shell: bash
       run: |
         aws s3 cp ${{ inputs.unreal-engine-zip }} ./ue.zip --no-progress
