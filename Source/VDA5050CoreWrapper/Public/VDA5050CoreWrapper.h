@@ -42,17 +42,16 @@ struct FVDA5050Order
 class VDA5050COREWRAPPER_API FVDA5050Client
 {
 public:
-
   FVDA5050Client();
 
   ~FVDA5050Client();
 
   bool Connect(
-    const std::string & BrokerAddress,
-    const std::string & InterfaceName,
-    const std::string & Version,
-    const std::string & Manufacturer,
-    const std::string & SerialNumber
+      const std::string& BrokerAddress,
+      const std::string& InterfaceName,
+      const std::string& Version,
+      const std::string& Manufacturer,
+      const std::string& SerialNumber
   );
 
   void Disconnect();
@@ -63,9 +62,9 @@ public:
 
   void SetPublishState(bool bEnabled);
 
-  std::function<void (const FVDA5050Node &)> OnNodeDispatch;
-  std::function<void (const FVDA5050Order &)> OnOrderReceived;
-  std::function<void (double & X, double & Y, double & Theta)> OnPositionRequest;
+  std::function<void(const FVDA5050Node&)> OnNodeDispatch;
+  std::function<void(const FVDA5050Order&)> OnOrderReceived;
+  std::function<void(double& X, double& Y, double& Theta)> OnPositionRequest;
 
 private:
   struct FImpl;

@@ -20,3 +20,18 @@ Contributors must sign-off each commit by adding a `Signed-off-by: ...`
 line to commit messages to certify that they have the right to submit
 the code they are contributing to the project according to the
 [Developer Certificate of Origin (DCO)](https://developercertificate.org/).
+
+## Style Guide
+
+### Code Linter
+
+Run `clang-format`
+
+```bash
+./clang-format.sh ./Source
+```
+
+Automatically reformat the files
+```bash
+./clang-format.sh --reformat ./Source
+```
