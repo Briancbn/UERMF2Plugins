@@ -30,6 +30,14 @@
    └── ...
    ```
 
+1. Configure compilation toolchains (5.3.2)
+
+   ```sh
+   export UNREAL_ENGINE_DIR=<path_to_unreal_engine>
+   export UNREAL_ENGINE_COMPILER_DIR=$UNREAL_ENGINE_DIR/Engine/Extras/ThirdPartyNotUE/SDKs/HostLinux/Linux_x64/v22_clang-16.0.6-centos7/x86_64-unknown-linux-gnu
+   export UNREAL_ENGINE_LIBCXX_DIR=$UNREAL_ENGINE_DIR/Engine/Source/ThirdParty/Unix/LibCxx
+   ```
+
 1. Compile RMF2 dependencies for Unreal
 
    Change to the `rmf2-unreal/Extern` directory,

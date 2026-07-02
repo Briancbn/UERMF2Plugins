@@ -6,29 +6,29 @@ project(
     LANGUAGES CXX C
 )
 
-# if (DEFINED ENV{UNREAL_ENGINE_ROOT} AND NOT UNREAL_ENGINE_ROOT)
-#   set(UNREAL_ENGINE_ROOT "$ENV{UNREAL_ENGINE_ROOT}")
-# endif()
-#
-# if (NOT UNREAL_ENGINE_ROOT)
-#   # On Windows and Mac, try to use the default UE 5.3 location
-#   if (WIN32)
-#      set(DEFAULT_UNREAL_INSTALLATION "C:/Program Files/Epic Games/UE_5.3")
-#   elseif(APPLE)
-#     set(DEFAULT_UNREAL_INSTALLATION "/Users/Shared/Epic Games/UE_5.3")
-#   endif()
-#
-#   if (NOT EXISTS "${DEFAULT_UNREAL_INSTALLATION}")
-#      message(FATAL_ERROR "Please specify the root of your Unreal Engine installation, either by setting the UNREAL_ENGINE_ROOT environment variable or with -DUNREAL_ENGINE_ROOT=path on the cmake command-line.")
-#   else()
-#     set(UNREAL_ENGINE_ROOT "${DEFAULT_UNREAL_INSTALLATION}")
-#   endif()
-# endif()
-#
-# message(STATUS "Using Unreal Engine installation at: ${UNREAL_ENGINE_ROOT}")
-#
-# # Set the UE environment variable so it's inherited by vcpkg builds.
-# set(ENV{UNREAL_ENGINE_ROOT} "${UNREAL_ENGINE_ROOT}")
+if (DEFINED ENV{UNREAL_ENGINE_ROOT} AND NOT UNREAL_ENGINE_ROOT)
+  set(UNREAL_ENGINE_ROOT "$ENV{UNREAL_ENGINE_ROOT}")
+endif()
+
+if (NOT UNREAL_ENGINE_ROOT)
+  # On Windows and Mac, try to use the default UE 5.3 location
+  if (WIN32)
+     set(DEFAULT_UNREAL_INSTALLATION "C:/Program Files/Epic Games/UE_5.3")
+  elseif(APPLE)
+    set(DEFAULT_UNREAL_INSTALLATION "/Users/Shared/Epic Games/UE_5.3")
+  endif()
+
+  if (NOT EXISTS "${DEFAULT_UNREAL_INSTALLATION}")
+     message(FATAL_ERROR "Please specify the root of your Unreal Engine installation, either by setting the UNREAL_ENGINE_ROOT environment variable or with -DUNREAL_ENGINE_ROOT=path on the cmake command-line.")
+  else()
+    set(UNREAL_ENGINE_ROOT "${DEFAULT_UNREAL_INSTALLATION}")
+  endif()
+endif()
+
+message(STATUS "Using Unreal Engine installation at: ${UNREAL_ENGINE_ROOT}")
+
+# Set the UE environment variable so it's inherited by vcpkg builds.
+set(ENV{UNREAL_ENGINE_ROOT} "${UNREAL_ENGINE_ROOT}")
 
 ## TODO(anyone): Android, IOS build
 
@@ -49,6 +49,16 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
+# Redirect these find_package(... REQUIRED) calls to the in-tree CPM builds
+# (which expose ::-namespaced aliases) instead of wrong-ABI system packages.
+if(DEFINED CMAKE_FIND_PACKAGE_REDIRECTS_DIR)
+  foreach(pkg eclipse-paho-mqtt-c pahomqttcpp fmt nlohmann_json)
+    file(WRITE "${CMAKE_FIND_PACKAGE_REDIRECTS_DIR}/${pkg}-config.cmake" "")
+  endforeach()
+endif()
+
+include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnrealOpenSSL.cmake)
+
 CPMAddPackage(
   NAME fmt
   GITHUB_REPOSITORY fmtlib/fmt
@@ -58,16 +68,22 @@ CPMAddPackage(
     "FMT_INSTALL ON"
 )
 
+# v1.3.16 defines the eclipse-paho-mqtt-c::* ALIAS targets in-tree (v1.3.9 did not).
 CPMAddPackage(
   NAME paho_mqtt_c
   GITHUB_REPOSITORY eclipse-paho/paho.mqtt.c
-  GIT_TAG v1.3.9
+  GIT_TAG v1.3.16
   OPTIONS
     "PAHO_BUILD_SHARED ON"
     "PAHO_WITH_SSL ON"
     "PAHO_ENABLE_TESTING OFF"
     "PAHO_ENABLE_CPACK OFF"
 )
+
+if(paho_mqtt_c_ADDED)
+  export(EXPORT eclipse-paho-mqtt-cTargets NAMESPACE eclipse-paho-mqtt-c::
+    FILE "${CMAKE_CURRENT_BINARY_DIR}/eclipse-paho-mqtt-cTargets.cmake")
+endif()
 
 CPMAddPackage(
   NAME paho_mqtt_cpp
@@ -84,8 +100,11 @@ CPMAddPackage(
   GIT_TAG v3.10.5
   OPTIONS
     "JSON_Install ON"
+    "JSON_MultipleHeaders ON"
 )
 
+# vda5050_core has no symbol-export annotations, so override the toolchain's
+# -fvisibility-ms-compat here to export its symbols (fmt/paho self-export).
 CPMAddPackage(
   NAME vda5050_core
   GITHUB_REPOSITORY Briancbn/vda5050_client
@@ -95,6 +114,8 @@ CPMAddPackage(
     "BUILD_TESTING OFF"
     "BUILD_EXAMPLES OFF"
     "EXCLUDE_FROM_ALL ON"
+    "CMAKE_C_VISIBILITY_PRESET default"
+    "CMAKE_CXX_VISIBILITY_PRESET default"
 )
 
 install(

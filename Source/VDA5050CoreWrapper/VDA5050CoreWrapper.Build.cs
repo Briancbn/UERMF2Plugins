@@ -11,6 +11,13 @@ public class VDA5050CoreWrapper : ModuleRules
         bUseRTTI = true;
         bEnableExceptions = true;
 
+        // The vendored vda5050_core json serialization (serialization.hpp) uses
+        // `vec = j.at("...")` assignments that are ambiguous under C++20's
+        // overload resolution (nlohmann's implicit json->value conversion
+        // collides with std::vector's initializer_list operator=). It compiles
+        // cleanly under C++17, so pin this module to C++17.
+        CppStandard = CppStandardVersion.Cpp17;
+
         PrivateIncludePaths.AddRange(
             new string[] {
                 Path.Combine(ModuleDirectory, "../../ThirdParty/include")
@@ -25,7 +32,7 @@ public class VDA5050CoreWrapper : ModuleRules
             "vda5050_logger",
             "vda5050_client",
             "paho-mqttpp3",
-            "paho-mqtt3a",
+            "paho-mqtt3as",
             "fmt",
         };
 
