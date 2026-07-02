@@ -30,6 +30,25 @@
    └── ...
    ```
 
+1. Compile RMF2 dependencies for Unreal
+
+   Change to the `rmf2-unreal/Extern` directory,
+   ```sh
+   cd rmf2-unreal/Extern
+   ```
+
+   and execute the following commands to build and install a **Debug** version
+   ```sh
+   cmake -B build -S . -DCMAKE_BUILD_TYPE=Debug
+   cmake --build build --target install
+   ```
+
+   To build a **Release** version, do the following:
+   ```sh
+   cmake -B build -S . -DCMAKE_BUILD_TYPE=Release
+   cmake --build build --target install
+   ```
+
 ### Step 2: Enable the Plugin
 
 > [!NOTE]
