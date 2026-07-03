@@ -40,6 +40,7 @@ endif()
 set(CMAKE_INSTALL_PREFIX ${CMAKE_CURRENT_LIST_DIR}/../ThirdParty)
 set(CMAKE_INSTALL_LIBDIR ${CMAKE_INSTALL_PREFIX}/lib/${CMAKE_SYSTEM_NAME}-${CMAKE_SYSTEM_PROCESSOR}-${CMAKE_BUILD_TYPE})
 
+set(CMAKE_INSTALL_BINDIR ${CMAKE_INSTALL_LIBDIR})
 # download CPM.cmake
 file(
   DOWNLOAD
@@ -49,6 +50,7 @@ file(
 )
 include(${CMAKE_CURRENT_BINARY_DIR}/cmake/CPM.cmake)
 
+if(NOT WIN32)
 # Redirect these find_package(... REQUIRED) calls to the in-tree CPM builds
 # (which expose ::-namespaced aliases) instead of wrong-ABI system packages.
 if(DEFINED CMAKE_FIND_PACKAGE_REDIRECTS_DIR)
@@ -57,7 +59,7 @@ if(DEFINED CMAKE_FIND_PACKAGE_REDIRECTS_DIR)
   endforeach()
 endif()
 
-include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnrealOpenSSL.cmake)
+#include(${CMAKE_CURRENT_SOURCE_DIR}/cmake/UnrealOpenSSL.cmake)
 
 CPMAddPackage(
   NAME fmt
@@ -102,6 +104,7 @@ CPMAddPackage(
     "JSON_Install ON"
     "JSON_MultipleHeaders ON"
 )
+endif()
 
 # vda5050_core has no symbol-export annotations, so override the toolchain's
 # -fvisibility-ms-compat here to export its symbols (fmt/paho self-export).
@@ -117,9 +120,29 @@ CPMAddPackage(
     "CMAKE_C_VISIBILITY_PRESET default"
     "CMAKE_CXX_VISIBILITY_PRESET default"
 )
+target_compile_definitions(vda5050_transport PUBLIC PAHO_MQTTPP_IMPORTS)
+
+find_package(fmt REQUIRED)
+find_package(PahoMqttCpp REQUIRED)
+find_package(eclipse-paho-mqtt-c REQUIRED)
+
+# install(
+#   TARGETS
+#     fmt::fmt
+#   LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+# )
 
 install(
-  TARGETS
-    fmt
-  LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
+    FILES
+      $<TARGET_FILE:fmt::fmt>
+      $<TARGET_FILE:eclipse-paho-mqtt-c::paho-mqtt3as>
+      $<TARGET_FILE:eclipse-paho-mqtt-c::paho-mqtt3c>
+      $<TARGET_FILE:PahoMqttCpp::paho-mqttpp3>
+    DESTINATION ${CMAKE_INSTALL_LIBDIR}
+)
+
+install(
+    TARGETS
+    vda5050_transport
+    LIBRARY DESTINATION ${CMAKE_INSTALL_LIBDIR}
 )

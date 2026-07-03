@@ -78,13 +78,13 @@ public class VDA5050CoreWrapper : ModuleRules
         string libPathRelease = libPathBase + "Release";
 
         bool useDebug = false;
-        if (Target.Configuration == UnrealTargetConfiguration.Debug || Target.Configuration == UnrealTargetConfiguration.DebugGame)
-        {
-            if (Directory.Exists(libPathDebug))
-            {
-                useDebug = true;
-            }
-        }
+        //if (Target.Configuration == UnrealTargetConfiguration.Debug || Target.Configuration == UnrealTargetConfiguration.DebugGame)
+        //{
+        //    if (Directory.Exists(libPathDebug))
+        //    {
+        //        useDebug = true;
+        //    }
+        //}
 
         string libPath = useDebug ? libPathDebug : libPathRelease;
 

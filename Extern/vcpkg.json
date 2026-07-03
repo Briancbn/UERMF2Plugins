@@ -1,0 +1,10 @@
+{
+  "name": "rmf2-unreal-extern",
+  "version": "0.0.0",
+  "dependencies": [
+    "paho-mqttpp3",
+    "openssl",
+    "fmt",
+    "nlohmann-json"
+  ]
+}
