@@ -1,4 +1,4 @@
-name: Build PR
+name: Build
 
 on:
   pull_request_target: # Safely handles forks by running trusted base code
