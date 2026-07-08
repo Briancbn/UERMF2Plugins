@@ -24,6 +24,7 @@ on:
 jobs:
   build:
     runs-on: ${{ inputs.runner-label }}
+    environment: dev
     steps:
       - name: Display system info
         run: |

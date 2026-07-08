@@ -12,7 +12,6 @@ on:
       - '*'
 jobs:
   Linux532:
-    environment: dev
     uses: ./.github/workflows/buildLinux.yml
     secrets: inherit
     with:
