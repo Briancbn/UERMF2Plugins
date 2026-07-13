@@ -208,8 +208,8 @@ public:
   }
 
 protected:
-  std::shared_ptr<UpdateBase> get_update_raw(std::type_index type
-  ) const override
+  std::shared_ptr<UpdateBase>
+  get_update_raw(std::type_index type) const override
   {
     std::lock_guard<std::mutex> lock(mutex_);
     return (updates_.count(type)) ? updates_.at(type) : nullptr;
