@@ -30,7 +30,7 @@
 			"LoadingPhase": "Default"
 		},
 		{
-			"Name": "RMF2GlbExporter",
+			"Name": "RMF2Exporter",
 			"Type": "Editor",
 			"LoadingPhase": "Default"
 		}
