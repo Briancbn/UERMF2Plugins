@@ -38,9 +38,7 @@ void FGLBExporter::RegisterMenuEntries()
           "Exports the current level to GLB using generated GLTF-safe materials."
       ),
       FSlateIcon(),
-      FUIAction(
-        FExecuteAction::CreateRaw(this, &FGLBExporter::RunExportScript)
-    )
+      FUIAction(FExecuteAction::CreateRaw(this, &FGLBExporter::RunExportScript))
   );
 
   Section.AddMenuEntry(
