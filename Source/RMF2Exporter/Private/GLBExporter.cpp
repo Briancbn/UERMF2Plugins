@@ -39,7 +39,8 @@ void FGLBExporter::RegisterMenuEntries()
       ),
       FSlateIcon(),
       FUIAction(
-        FExecuteAction::CreateRaw(this, &FGLBExporter::RunExportScript))
+        FExecuteAction::CreateRaw(this, &FGLBExporter::RunExportScript)
+    )
   );
 
   Section.AddMenuEntry(
