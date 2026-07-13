@@ -1,8 +1,8 @@
+#include "GLBExporter.h"
 #include "HAL/PlatformProcess.h"
 #include "IPythonScriptPlugin.h"
 #include "Interfaces/IPluginManager.h"
 #include "Misc/Paths.h"
-#include "GLBExporter.h"
 #include "ToolMenus.h"
 
 #define LOCTEXT_NAMESPACE "FGLBExporter"
@@ -38,10 +38,7 @@ void FGLBExporter::RegisterMenuEntries()
           "Exports the current level to GLB using generated GLTF-safe materials."
       ),
       FSlateIcon(),
-      FUIAction(FExecuteAction::CreateRaw(
-          this,
-          &FGLBExporter::RunExportScript
-      ))
+      FUIAction(FExecuteAction::CreateRaw(this, &FGLBExporter::RunExportScript))
   );
 
   Section.AddMenuEntry(
@@ -52,17 +49,16 @@ void FGLBExporter::RegisterMenuEntries()
           "Opens the GLB export output folder."
       ),
       FSlateIcon(),
-      FUIAction(FExecuteAction::CreateRaw(
-          this,
-          &FGLBExporter::OpenExportFolder
-      ))
+      FUIAction(
+          FExecuteAction::CreateRaw(this, &FGLBExporter::OpenExportFolder)
+      )
   );
 }
 
 void FGLBExporter::RunExportScript()
 {
   TSharedPtr<IPlugin> Plugin =
-    IPluginManager::Get().FindPlugin(TEXT("RMF2ForUnreal"));
+      IPluginManager::Get().FindPlugin(TEXT("RMF2ForUnreal"));
   if (!Plugin.IsValid())
   {
     UE_LOG(LogTemp, Error, TEXT("RMF2ForUnreal plugin not found."));
