@@ -1,7 +1,7 @@
 name: Build
 
 on:
-  pull_request: # Safely handles forks by running trusted base code
+  pull_request_target: # Safely handles forks by running trusted base code
     types: [opened, synchronize, reopened]
   push:
     branches:
