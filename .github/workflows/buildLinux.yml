@@ -3,6 +3,12 @@ name: Build Linux
 on:
   workflow_call:
     inputs:
+      source-ref:
+        required: true
+        type: string
+      source-repository:
+        required: true
+        type: string
       target-env:
         required: true
         type: string
@@ -64,8 +70,11 @@ jobs:
         with:
           unreal-engine-zip: ${{ inputs.unreal-engine-zip }}
           unreal-program-name: ${{ inputs.unreal-program-name }}
-      - name: Check out repository code
+      - name: Check out PR code
         uses: actions/checkout@v6
+        with:
+          repository: ${{ inputs.source-repository }}
+          ref: ${{ inputs.source-ref }}
       - name: Set environment variables
         run: |
           GITHUB_REF_SLUG=$(echo "$GITHUB_REF_NAME" | tr '[:upper:]' '[:lower:]' | sed 's/[^a-z0-9.]/-/g' | sed 's/^-//;s/-$//')
