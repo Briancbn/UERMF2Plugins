@@ -23,5 +23,5 @@ jobs:
       unreal-program-name: "UE_5.3.2"
       upload-package-base-name: "RMF2ForUnreal-532-linux"
       clang-version: "v22_clang-16.0.6-centos7"
-      pr-build: ${{ github.event_name == 'pull_request' }}
+      pr-build: ${{ github.event_name == 'pull_request_target' }}
 
