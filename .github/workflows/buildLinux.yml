@@ -65,8 +65,8 @@ jobs:
           unreal-engine-zip: ${{ inputs.unreal-engine-zip }}
           unreal-program-name: ${{ inputs.unreal-program-name }}
       - name: Echo Build Environment
-        run: echo "${{ inputs.pr-build == true && 'Building on dev...' || 'Building on prod...' }}""
-      - name: Check out repository code 
+        run: echo "${{ inputs.pr-build == true && 'Building on dev...' || 'Building on prod...' }}"
+      - name: Check out repository code
         uses: actions/checkout@v6
       - name: Set environment variables
         run: |
