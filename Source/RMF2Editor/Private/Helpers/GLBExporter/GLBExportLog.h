@@ -31,7 +31,8 @@ struct FGLBActorConfig
       TEXT("exponentialheightfog"),
       TEXT("fog"),
       TEXT("kiva"),
-      TEXT("forklift")};
+      TEXT("forklift")
+    };
 
   TArray<FString> ExcludedClassParts = {
       TEXT("cameraactor"),
@@ -48,7 +49,8 @@ struct FGLBActorConfig
       TEXT("reflectioncapture"),
       TEXT("spherecapture"),
       TEXT("boxreflectioncapture"),
-      TEXT("hdribackdrop")};
+      TEXT("hdribackdrop")
+    };
 };
 
 struct FGLBTextureConfig
@@ -61,7 +63,8 @@ struct FGLBTextureConfig
       TEXT("color"),
       TEXT("colour"),
       TEXT("_bc"),
-      TEXT("_d")};
+      TEXT("_d")
+    };
 
   TArray<FString> NormalKeywords = {TEXT("normal"), TEXT("nrm"), TEXT("_n")};
 
@@ -72,29 +75,34 @@ struct FGLBTextureConfig
       TEXT("occlusion_roughness_metallic"),
       TEXT("roughnessmetallic"),
       TEXT("arm"),
-      TEXT("rao")};
+      TEXT("rao")
+    };
 
   TArray<FString> RoughnessKeywords = {
       TEXT("roughness"),
       TEXT("_rgh"),
-      TEXT("_rough")};
+      TEXT("_rough")
+    };
 
   TArray<FString> MetallicKeywords = {
       TEXT("metallic"),
       TEXT("metalness"),
-      TEXT("_metal")};
+      TEXT("_metal")
+    };
 
   TArray<FString> AOKeywords = {
       TEXT("ao"),
       TEXT("ambientocclusion"),
-      TEXT("occlusion")};
+      TEXT("occlusion")
+    };
 
   TArray<FString> OpacityKeywords = {
       TEXT("opacity"),
       TEXT("alpha"),
       TEXT("mask"),
       TEXT("color_mask"),
-      TEXT("colour_mask")};
+      TEXT("colour_mask")
+    };
 };
 
 struct FGLBMaterialConfig
