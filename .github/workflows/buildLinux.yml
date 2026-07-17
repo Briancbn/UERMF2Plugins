@@ -3,9 +3,6 @@ name: Build Linux
 on:
   workflow_call:
     inputs:
-      target-env:
-        required: true
-        type: string
       runner-label:
         required: true
         type: string
@@ -24,10 +21,13 @@ on:
       clang-version:
         required: true
         type: string
+      pr-build:
+        required: true
+        type: boolean
 jobs:
   build:
     runs-on: ${{ inputs.runner-label }}
-    environment: ${{ inputs.target-env }}
+    environment: ${{ inputs.pr-build && 'dev' || 'prod' }}
     steps:
       - name: Display system info
         run: |
@@ -64,7 +64,9 @@ jobs:
         with:
           unreal-engine-zip: ${{ inputs.unreal-engine-zip }}
           unreal-program-name: ${{ inputs.unreal-program-name }}
-      - name: Check out repository code
+      - name: Echo Build Environment
+        run: echo "${{ inputs.pr-build == true && 'Building on dev...' || 'Building on prod...' }}""
+      - name: Check out repository code 
         uses: actions/checkout@v6
       - name: Set environment variables
         run: |
