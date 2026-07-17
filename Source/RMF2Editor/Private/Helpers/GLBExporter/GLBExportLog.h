@@ -78,23 +78,14 @@ struct FGLBTextureConfig
       TEXT("rao")
   };
 
-  TArray<FString> RoughnessKeywords = {
-      TEXT("roughness"),
-      TEXT("_rgh"),
-      TEXT("_rough")
-  };
+  TArray<FString> RoughnessKeywords =
+      {TEXT("roughness"), TEXT("_rgh"), TEXT("_rough")};
 
-  TArray<FString> MetallicKeywords = {
-      TEXT("metallic"),
-      TEXT("metalness"),
-      TEXT("_metal")
-  };
+  TArray<FString> MetallicKeywords =
+      {TEXT("metallic"), TEXT("metalness"), TEXT("_metal")};
 
-  TArray<FString> AOKeywords = {
-      TEXT("ao"),
-      TEXT("ambientocclusion"),
-      TEXT("occlusion")
-  };
+  TArray<FString> AOKeywords =
+      {TEXT("ao"), TEXT("ambientocclusion"), TEXT("occlusion")};
 
   TArray<FString> OpacityKeywords = {
       TEXT("opacity"),
