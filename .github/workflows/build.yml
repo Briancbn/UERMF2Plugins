@@ -11,7 +11,7 @@ on:
       - '*'
 
 jobs:
-  Linux_532:
+  Linux532:
     uses: ./.github/workflows/buildLinux.yml
     secrets: inherit
     with:
