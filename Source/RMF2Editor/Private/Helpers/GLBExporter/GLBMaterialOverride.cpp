@@ -18,8 +18,7 @@ bool FScopedMaterialOverrides::Override(
   }
 
   const bool bAlreadyOverridden = Records.ContainsByPredicate(
-      [Component, SlotIndex](const FGLBMaterialOverride& Record)
-      {
+      [Component, SlotIndex](const FGLBMaterialOverride& Record) {
         return Record.Component.Get() == Component &&
                Record.SlotIndex == SlotIndex;
       }

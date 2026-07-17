@@ -149,12 +149,10 @@ bool FGLBExportHelper::Run()
           );
           if (!IsValid(GeneratedMaterial))
           {
-            Report.Errors.Add(
-                FString::Printf(
-                    TEXT("Failed to generate a material for %s"),
-                    *OriginalMaterial->GetPathName()
-                )
-            );
+            Report.Errors.Add(FString::Printf(
+                TEXT("Failed to generate a material for %s"),
+                *OriginalMaterial->GetPathName()
+            ));
             continue;
           }
 

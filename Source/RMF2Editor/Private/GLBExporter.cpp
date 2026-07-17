@@ -62,8 +62,7 @@ void FGLBExporter::RegisterMenuEntries()
           "Opens the GLB export output folder."
       ),
       FSlateIcon(),
-      FUIAction(
-          FExecuteAction::CreateRaw(this, &FGLBExporter::OpenExportFolder)
+      FUIAction(FExecuteAction::CreateRaw(this, &FGLBExporter::OpenExportFolder)
       )
   );
 }

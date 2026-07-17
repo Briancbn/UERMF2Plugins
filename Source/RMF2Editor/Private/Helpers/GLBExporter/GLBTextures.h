@@ -24,8 +24,8 @@ class FGLBTextureClassifier
 public:
   explicit FGLBTextureClassifier(const FGLBTextureConfig& InConfig);
 
-  TArray<UTexture*>
-  FindTextureDependencies(const UMaterialInterface* Material) const;
+  TArray<UTexture*> FindTextureDependencies(const UMaterialInterface* Material
+  ) const;
 
   FGLBTextureInfo Classify(const TArray<UTexture*>& Textures) const;
 

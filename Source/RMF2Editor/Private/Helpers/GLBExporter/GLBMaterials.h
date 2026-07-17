@@ -43,12 +43,9 @@ private:
   UMaterialExpression*
   CreateScalar(UMaterial* Material, float Value, int32 X, int32 Y) const;
 
-  UMaterialExpression* CreateColor(
-      UMaterial* Material,
-      const FLinearColor& Color,
-      int32 X,
-      int32 Y
-  ) const;
+  UMaterialExpression*
+  CreateColor(UMaterial* Material, const FLinearColor& Color, int32 X, int32 Y)
+      const;
 
   void CopyBasicProperties(
       const UMaterialInterface* Original,
