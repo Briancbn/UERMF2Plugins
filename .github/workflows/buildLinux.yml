@@ -78,7 +78,7 @@ jobs:
         with:
           repository: ${{inputs.source-repository }}
           ref: ${{ inputs.source-ref }}
-      - name: Check out repository code (Not PR)
+      - name: Check out repository code (Push)
         if: ${{ !inputs.pr-build }}
         uses: actions/checkout@v6
       - name: Set environment variables
