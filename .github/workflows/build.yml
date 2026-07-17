@@ -7,6 +7,7 @@ on:
     branches:
       - main
       - develop/test-ci
+      - download_glb
     tags:
       - '*'
 jobs:
@@ -14,7 +15,7 @@ jobs:
     uses: ./.github/workflows/buildLinux.yml
     secrets: inherit
     with:
-      target-env: ${{ github.event_name == 'push' && 'prod' || 'dev' }}
+      target-env: dev
       runner-label: ubuntu-22.04
       unreal-engine-version: "5.3.2"
       unreal-engine-zip: "s3://rmf2-unreal-engine/5.3.2/Linux_Unreal_Engine_5.3.2.zip"
