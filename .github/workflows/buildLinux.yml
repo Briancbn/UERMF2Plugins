@@ -3,6 +3,12 @@ name: Build Linux
 on:
   workflow_call:
     inputs:
+      source-ref:
+        required: true
+        type: string
+      source-repository:
+        required: true
+        type: string
       runner-label:
         required: true
         type: string
@@ -66,7 +72,14 @@ jobs:
           unreal-program-name: ${{ inputs.unreal-program-name }}
       - name: Echo Build Environment
         run: echo "${{ inputs.pr-build == true && 'Building on dev...' || 'Building on prod...' }}"
-      - name: Check out repository code
+      - name: Check out repository code (PR)
+        if: ${{ inputs.pr-build }}
+        uses: actions/checkout@v6
+        with:
+          repository: ${{inputs.source-repository }}
+          ref: ${{ inputs.source-ref }}
+      - name: Check out repository code (Not PR)
+        if: ${{ !inputs.pr-build }}
         uses: actions/checkout@v6
       - name: Set environment variables
         run: |
