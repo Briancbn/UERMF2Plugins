@@ -3,12 +3,6 @@ name: Build Linux
 on:
   workflow_call:
     inputs:
-      source-ref:
-        required: true
-        type: string
-      source-repository:
-        required: true
-        type: string
       runner-label:
         required: true
         type: string
@@ -76,8 +70,8 @@ jobs:
         if: ${{ inputs.pr-build }}
         uses: actions/checkout@v6
         with:
-          repository: ${{inputs.source-repository }}
-          ref: ${{ inputs.source-ref }}
+          repository: ${{ github.event.pull_request.head.sha }}
+          ref: ${{ github.event.pull_request.head.repo.full_name }}
       - name: Check out repository code (Push)
         if: ${{ !inputs.pr-build }}
         uses: actions/checkout@v6
