@@ -99,5 +99,3 @@ void FGLBExporter::OpenExportFolder()
 }
 
 #undef LOCTEXT_NAMESPACE
-
-IMPLEMENT_MODULE(FRMF2ExporterModule, RMF2Exporter)
